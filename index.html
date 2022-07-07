@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="queries.css" />
+    <script defer src="script.js"></script>
+    <title>Todo app</title>
+  </head>
+  <body>
+    <img class="background-image" src="images/bg-desktop-dark.jpg" />
+    <div class="container flexbox">
+      <div class="heading flexbox">
+        <div class="title">Todo</div>
+        <button class="theme-btn">
+          <img src="images/icon-sun.svg" alt="switch-to-light-mode" />
+        </button>
+      </div>
+      <div class="to-do-input user-input">
+        <input type="checkbox" id="input-checkbox" class="checkbox" />
+        <label
+          for="input-checkbox"
+          class="checkbox-label input-checkbox-label"
+        ></label>
+        <input
+          type="text"
+          class="to-do-input-box"
+          placeholder="Create a new to do..."
+        />
+      </div>
+      <div class="to-do flexbox">
+        <div class="to-do-input">
+          <input type="checkbox" id="checkbox-1" class="checkbox" />
+          <label for="checkbox-1" class="checkbox-label"
+            >Complete Todo App on Frontend mentor</label
+          >
+          <button class="delete">
+            <img src="images/icon-cross.svg" alt="delete-this-to-do" />
+          </button>
+        </div>
+        <div class="to-do-input">
+          <input type="checkbox" id="checkbox-2" class="checkbox" />
+          <label for="checkbox-2" class="checkbox-label"
+            >Complete Todo App on Frontend mentor</label
+          >
+          <button class="delete">
+            <img src="images/icon-cross.svg" alt="delete-this-to-do" />
+          </button>
+        </div>
+        <div class="to-do-input">
+          <input type="checkbox" id="checkbox-3" class="checkbox" />
+          <label for="checkbox-3" class="checkbox-label"
+            >Complete Todo App on Frontend mentor</label
+          >
+          <button class="delete">
+            <img src="images/icon-cross.svg" alt="delete-this-to-do" />
+          </button>
+        </div>
+        <div class="filter-container flexbox">
+          <div class="left-to-do">5 items left</div>
+          <div class="filter">
+            <button class="all-to-do filter-active">All</button>
+            <button class="active-to-do">Active</button>
+            <button class="completed-to-do">Completed</button>
+          </div>
+          <div class="clear-to-do">Clear Completed</div>
+        </div>
+      </div>
+      <div class="mobile-filter-container flexbox">
+        <div class="filter">
+          <button class="all-to-do filter-active">All</button>
+          <button class="active-to-do">Active</button>
+          <button class="completed-to-do">Completed</button>
+        </div>
+      </div>
+    </div>
+    <footer class="footer">Drag and drop to reorder list</footer>
+  </body>
+</html>
