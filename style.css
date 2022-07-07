@@ -110,6 +110,12 @@ button:hover {
   border-bottom: 1px solid var(--very-dark-grayish-blue-2-dark);
 }
 
+.no-items {
+  justify-content: center;
+  font-size: 1.8rem;
+  color: var(--very-dark-grayish-blue-1-dark);
+}
+
 .user-input {
   margin-bottom: 3rem;
 }
@@ -235,19 +241,25 @@ input[type="checkbox"]:checked + label:hover {
   color: var(--dark-grayish-blue-dark);
   justify-content: space-between;
   justify-self: flex-end;
+  order: 1;
 }
 
 .mobile-filter-container {
   visibility: hidden;
 }
 
-.filter > * {
+.filter > *,
+.clear-to-do {
   background-color: transparent;
   border: none;
   font-family: inherit;
   font-weight: 700;
   color: var(--very-dark-grayish-blue-1-dark);
   padding: 1rem;
+}
+
+.clear-to-do {
+  padding: 0;
 }
 
 .filter {
