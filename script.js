@@ -1,15 +1,25 @@
 const toDoInput = document.querySelector(".to-do-input-box");
 const toDoList = document.querySelector(".to-do");
-let deleteBtn = document.querySelectorAll(".delete");
-let toDo = document.querySelectorAll(".to-do-input");
-const filterBtn = document.querySelector(".filter-container");
+const deleteBtn = document.querySelectorAll(".delete");
+const toDo = document.getElementsByClassName("to-do-input");
+const filterBtn = document.querySelectorAll(".filter");
 const clearBtn = document.querySelector(".clear-to-do");
+const checkboxes = document.getElementsByClassName("checkbox");
+const left = document.getElementsByClassName("left-to-do");
 
-checkEmptyList();
+function updateCount() {
+  Array.from(left).forEach((l) => {
+    let items = 0;
+    Array.from(toDo).forEach((t) => {
+      if (t.parentElement.classList.contains("to-do")) items++;
+    });
+    l.textContent = `${items} items`;
+  });
+}
 
 function fillEmptyToDoList() {
   const html = `
-    <div class="to-do-input no-items">
+    <div class="no-items">
         <p class="no-items">Your to do list is empty...</p>
     </div>
   `;
@@ -22,21 +32,27 @@ function checkEmptyList() {
     child.classList.contains("to-do-input")
   );
   if (!notEmpty) fillEmptyToDoList();
+  else document.querySelector(".no-items")?.remove();
 }
+checkEmptyList();
 
-filterBtn.addEventListener("click", function (e) {
-  const children = Array.from(e.target.closest(".filter").children);
-  children.forEach((child) => {
-    child.classList.remove("filter-active");
+Array.from(filterBtn).forEach((btn) => {
+  btn.addEventListener("click", function (e) {
+    const children = Array.from(e.target.closest(".filter").children);
+    children.forEach((child) => {
+      child.classList.remove("filter-active");
+    });
+    e.target.classList.add("filter-active");
   });
-  e.target.classList.add("filter-active");
 });
 
 clearBtn.addEventListener("click", function () {
-  toDo.forEach((el) => {
-    if (el.parentElement === toDoList) el.remove();
+  Array.from(checkboxes).forEach((box) => {
+    if (box.checked && box.parentElement.classList.contains("to-do-input")) {
+      box.parentElement.remove();
+    }
   });
-  checkEmptyList();
+  updateCount();
 });
 
 toDoInput.addEventListener("keypress", function (e) {
@@ -56,6 +72,7 @@ toDoInput.addEventListener("keypress", function (e) {
     `;
     toDoList.insertAdjacentHTML("beforeend", html);
     toDoInput.value = "";
+    updateCount();
     checkEmptyList();
   }
 });
@@ -65,4 +82,5 @@ toDoList.addEventListener("click", function (e) {
     e.target.closest(".to-do-input")?.remove();
   }
   checkEmptyList();
+  updateCount();
 });
