@@ -8,13 +8,13 @@
     <script defer src="script.js"></script>
     <title>Todo app</title>
   </head>
-  <body>
+  <body class="">
     <img class="background-image" src="images/bg-desktop-dark.jpg" />
     <div class="container flexbox">
       <div class="heading flexbox">
         <div class="title">Todo</div>
         <button class="theme-btn">
-          <img src="images/icon-sun.svg" alt="switch-to-light-mode" />
+          <img class="theme-icon" src="images/icon-sun.svg" alt="switch-to-light-mode" />
         </button>
       </div>
       <div class="to-do-input user-input">
@@ -31,7 +31,7 @@
         />
       </div>
       <div class="to-do flexbox">
-        <div class="filter-container flexbox">
+        <div class="filter-container hide-filter flexbox">
           <div class="left-to-do">0 items left</div>
           <div class="filter">
             <button class="all-to-do filter-active">All</button>
@@ -41,7 +41,7 @@
           <button class="clear-to-do">Clear Completed</butt>
         </div>
       </div>
-      <div class="mobile-filter-container flexbox">
+      <div class="mobile-filter-container hide-filter flexbox">
         <div class="filter">
           <button class="all-to-do filter-active">All</button>
           <button class="active-to-do">Active</button>
