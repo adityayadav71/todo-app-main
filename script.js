@@ -6,6 +6,28 @@ const filterBtn = document.querySelectorAll(".filter");
 const clearBtn = document.querySelector(".clear-to-do");
 const checkboxes = document.getElementsByClassName("checkbox");
 const left = document.getElementsByClassName("left-to-do");
+const themeSwitch = document.querySelector(".theme-btn");
+const bgImage = document.querySelector(".background-image");
+const themeIcon = document.querySelector(".theme-icon");
+
+themeSwitch.addEventListener("click", switchTheme);
+function switchTheme() {
+  if (!document.body.classList.contains("light-theme")) {
+    // Change background image
+    bgImage.src = "images/bg-desktop-light.jpg";
+    // Change Theme button icon
+    themeIcon.src = "images/icon-moon.svg";
+    // Change body classList
+    document.body.classList.add("light-theme");
+  } else {
+    // Change background image
+    bgImage.src = "images/bg-desktop-dark.jpg";
+    // Change Theme button icon
+    themeIcon.src = "images/icon-sun.svg";
+    // Change body classList
+    document.body.classList.remove("light-theme");
+  }
+}
 
 function updateCount() {
   Array.from(left).forEach((l) => {
@@ -13,26 +35,43 @@ function updateCount() {
     Array.from(toDo).forEach((t) => {
       if (t.parentElement.classList.contains("to-do")) items++;
     });
-    l.textContent = `${items} items`;
+    l.textContent = `${items} items left`;
   });
 }
 
 function fillEmptyToDoList() {
   const html = `
     <div class="no-items">
-        <p class="no-items">Your to do list is empty...</p>
+        <p >Your to do list is empty...</p>
     </div>
   `;
   toDoList.insertAdjacentHTML("beforeend", html);
 }
 
+function emptyFilled() {
+  const children = Array.from(toDoList.children);
+  const filled = [...children].some((child) =>
+    child.classList.contains("no-items")
+  );
+  return filled;
+}
+
 function checkEmptyList() {
   const children = Array.from(toDoList.children);
-  const notEmpty = [...children].some((child) =>
+  const empty = ![...children].some((child) =>
     child.classList.contains("to-do-input")
   );
-  if (!notEmpty) fillEmptyToDoList();
-  else document.querySelector(".no-items")?.remove();
+  if (empty) {
+    fillEmptyToDoList();
+    clearBtn.style.display = "none";
+    filterBtn[0].style.display = "none";
+    filterBtn[1].style.display = "none";
+  } else {
+    clearBtn.style.display = "flex";
+    filterBtn[0].style.display = "flex";
+    filterBtn[1].style.display = "flex";
+    document.querySelector(".no-items")?.remove();
+  }
 }
 checkEmptyList();
 
@@ -52,11 +91,13 @@ clearBtn.addEventListener("click", function () {
       box.parentElement.remove();
     }
   });
+  checkEmptyList();
   updateCount();
 });
 
 toDoInput.addEventListener("keypress", function (e) {
   if (e.key === "Enter") {
+    if (toDoInput.value === "") return;
     const html = `
       <div class="to-do-input">
         <input type="checkbox" id="checkbox-${
@@ -80,7 +121,7 @@ toDoInput.addEventListener("keypress", function (e) {
 toDoList.addEventListener("click", function (e) {
   if (e.target.classList.contains("delete")) {
     e.target.closest(".to-do-input")?.remove();
+    checkEmptyList();
+    updateCount();
   }
-  checkEmptyList();
-  updateCount();
 });
