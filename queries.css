@@ -1,4 +1,4 @@
-@media all and (max-width: 375px) {
+@media all and (max-width: 425px) {
   html {
     font-size: 50%;
   }
@@ -6,7 +6,7 @@
     width: 90vw;
   }
   .filter-container .filter {
-    display: none;
+    display: none !important;
   }
   .mobile-filter-container {
     visibility: visible;
