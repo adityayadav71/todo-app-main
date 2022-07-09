@@ -20,3 +20,5 @@ images
 design
 README-template.md
 style-guide.md
+node_modules
+.env 
