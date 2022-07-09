@@ -14,16 +14,16 @@ themeSwitch.addEventListener("click", switchTheme);
 function switchTheme() {
   if (!document.body.classList.contains("light-theme")) {
     // Change background image
-    bgImage.src = "images/bg-desktop-light.jpg";
+    bgImage.src = "public/images/bg-desktop-light.jpg";
     // Change Theme button icon
-    themeIcon.src = "images/icon-moon.svg";
+    themeIcon.src = "public/images/icon-moon.svg";
     // Change body classList
     document.body.classList.add("light-theme");
   } else {
     // Change background image
-    bgImage.src = "images/bg-desktop-dark.jpg";
+    bgImage.src = "public/images/bg-desktop-dark.jpg";
     // Change Theme button icon
-    themeIcon.src = "images/icon-sun.svg";
+    themeIcon.src = "public/images/icon-sun.svg";
     // Change body classList
     document.body.classList.remove("light-theme");
   }
@@ -107,10 +107,21 @@ toDoInput.addEventListener("keypress", function (e) {
       toDoInput.value
     }</label>
         <button class="delete">
-          <img class="delete" src="images/icon-cross.svg" alt="delete-this-to-do" />
+          <img class="delete" src="/images/icon-cross.svg" alt="delete-this-to-do" />
         </button>
       </div>
     `;
+    fetch("/addToDo", {
+      method: "POST",
+
+      body: JSON.stringify({
+        username: "ay",
+        toDo: "toDoInput.value",
+      }),
+      headers: {
+        "Content-type": "application/json; charset=UTF-8",
+      },
+    });
     toDoList.insertAdjacentHTML("beforeend", html);
     toDoInput.value = "";
     updateCount();

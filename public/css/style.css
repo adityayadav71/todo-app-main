@@ -154,7 +154,7 @@ button:hover {
 .checkbox-label::before,
 .to-do-input-box::before {
   content: "";
-  background-image: url(images/icon-check.svg), var(--linear-gradient);
+  background-image: url(/images/icon-check.svg), var(--linear-gradient);
   background-position: center;
   background-repeat: no-repeat;
   width: 2rem;
