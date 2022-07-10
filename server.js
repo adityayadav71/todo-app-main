@@ -62,7 +62,7 @@ function authChecker(req, res, next) {
   if (req.session.username !== undefined) {
     next();
   } else {
-    res.redirect("/login");
+    res.redirect("/register");
   }
 }
 
