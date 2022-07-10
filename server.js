@@ -129,4 +129,4 @@ app.get("/getToDO", async (req, res) => {
   res.json(docs);
 });
 
-app.listen(3000);
+app.listen(process.env.PORT || 3000);
