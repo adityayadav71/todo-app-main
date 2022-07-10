@@ -3,6 +3,8 @@ const mongoose = require("mongoose");
 const { nextTick } = require("process");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
+const session = require("express-session");
+const MongoStore = require("connect-mongo");
 const User = require("./schemas/user-schema.js");
 const ToDo = require("./schemas/user-toDo.js");
 const app = express();
@@ -19,6 +21,13 @@ async function connect() {
 }
 connect();
 
+const sessionStorgae = MongoStore.create({
+  mongoUrl: uri,
+  dbName: "todo-app",
+  collectionName: "session",
+  ttl: 14 * 24 * 60 * 60,
+  autoRemove: "native",
+});
 app.set("view-engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -30,26 +39,51 @@ app.use(
 
 app.use(express.static(__dirname + "/public"));
 
-app.get("/", (req, res) => {
+app.use(
+  session({
+    name: "sessiontodo",
+    secret: "changethiskeylater",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 24 * 60 * 60 * 1000 },
+    store: sessionStorgae,
+  })
+);
+
+app.get("/", authChecker, (req, res) => {
   res.render("index.ejs");
 });
+
 app.get("/login", (req, res) => {
   res.render("login.ejs");
 });
 
+function authChecker(req, res, next) {
+  if (req.session.username !== undefined) {
+    next();
+  } else {
+    res.redirect("/login");
+  }
+}
+
 app.post("/login", async (req, res) => {
-  User.findOne(
-    { username: req.body.username, password: req.body.password },
-    function (err, docs) {
-      if (err) {
-        console.log(err);
-      } else {
-        if (docs !== null) {
+  User.findOne({ username: req.body.username }, async function (err, docs) {
+    if (err) {
+      console.log(err);
+    } else {
+      if (docs !== null) {
+        const passwordMatch = await bcrypt.compare(
+          req.body.password,
+          docs.password
+        );
+
+        if (passwordMatch) {
+          req.session.username = req.body.username;
           res.redirect("/");
         } else res.redirect("/register");
-      }
+      } else res.redirect("/register");
     }
-  );
+  });
 });
 
 app.get("/register", (req, res) => {
@@ -72,11 +106,27 @@ app.post("/register", async (req, res) => {
 });
 
 app.post("/addToDo", async (req, res) => {
+  const data = req.body;
   const userToDo = new ToDo({
-    username: req.body.username,
-    toDo: req.body.toDo,
+    username: req.session.username,
+    toDo: data.input,
   });
   await userToDo.save();
+  res.json({ success: true });
+});
+
+app.post("/removeToDo", async (req, res) => {
+  const data = req.body;
+  const result = await ToDo.deleteOne({
+    username: req.session.username,
+    toDo: data.toDo,
+  });
+  res.json({ success: true });
+});
+
+app.get("/getToDO", async (req, res) => {
+  const docs = await ToDo.find({ username: req.session.username });
+  res.json(docs);
 });
 
 app.listen(3000);
