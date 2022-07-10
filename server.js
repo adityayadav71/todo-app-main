@@ -129,4 +129,9 @@ app.get("/getToDO", async (req, res) => {
   res.json(docs);
 });
 
+app.post("/logout", (req, res) => {
+  res.redirect("/login");
+  req.session.destroy();
+});
+
 app.listen(process.env.PORT || 3000);

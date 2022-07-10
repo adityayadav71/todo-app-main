@@ -12,7 +12,18 @@ const left = document.getElementsByClassName("left-to-do");
 const themeSwitch = document.querySelector(".theme-btn");
 const bgImage = document.querySelector(".background-image");
 const themeIcon = document.querySelector(".theme-icon");
+const logoutBtn = document.querySelector(".logout-btn");
 
+logoutBtn.addEventListener("click", async function () {
+  await fetch("/logout", {
+    method: "POST",
+
+    body: "",
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  });
+});
 allBtn.forEach((btn) => {
   btn.addEventListener("click", function () {
     Array.from(toDo).forEach((el) => {
