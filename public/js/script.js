@@ -23,6 +23,7 @@ logoutBtn.addEventListener("click", async function () {
       "Content-type": "application/json; charset=UTF-8",
     },
   });
+  window.location.href = "../views/login.ejs";
 });
 allBtn.forEach((btn) => {
   btn.addEventListener("click", function () {

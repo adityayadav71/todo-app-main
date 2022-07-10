@@ -130,7 +130,6 @@ app.get("/getToDO", async (req, res) => {
 });
 
 app.post("/logout", (req, res) => {
-  res.redirect("/login");
   req.session.destroy();
 });
 
