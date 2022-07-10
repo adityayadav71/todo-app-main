@@ -3,12 +3,52 @@ const toDoList = document.querySelector(".to-do");
 const deleteBtn = document.querySelectorAll(".delete");
 const toDo = document.getElementsByClassName("to-do-input");
 const filterBtn = document.querySelectorAll(".filter");
+const allBtn = document.querySelectorAll(".all-to-do");
+const activeBtn = document.querySelectorAll(".active-to-do");
+const completedBtn = document.querySelectorAll(".completed-to-do");
 const clearBtn = document.querySelector(".clear-to-do");
 const checkboxes = document.getElementsByClassName("checkbox");
 const left = document.getElementsByClassName("left-to-do");
 const themeSwitch = document.querySelector(".theme-btn");
 const bgImage = document.querySelector(".background-image");
 const themeIcon = document.querySelector(".theme-icon");
+
+allBtn.forEach((btn) => {
+  btn.addEventListener("click", function () {
+    Array.from(toDo).forEach((el) => {
+      el.style.display = "flex";
+    });
+    updateCount();
+  });
+});
+
+activeBtn.forEach((btn) => {
+  btn.addEventListener("click", function () {
+    Array.from(toDo).forEach((el) => {
+      if (
+        el.parentElement.classList.contains("to-do") &&
+        el.children[0].checked
+      )
+        el.style.display = "none";
+      else el.style.display = "flex";
+    });
+    updateCount();
+  });
+});
+
+completedBtn.forEach((btn) => {
+  btn.addEventListener("click", function () {
+    Array.from(toDo).forEach((el) => {
+      if (
+        el.parentElement.classList.contains("to-do") &&
+        !el.children[0].checked
+      )
+        el.style.display = "none";
+      else el.style.display = "flex";
+    });
+    updateCount();
+  });
+});
 
 themeSwitch.addEventListener("click", switchTheme);
 function switchTheme() {
@@ -87,7 +127,7 @@ Array.from(filterBtn).forEach((btn) => {
 
 clearBtn.addEventListener("click", function () {
   Array.from(checkboxes).forEach(async (box) => {
-    await deleteToDo(box.parentElement.children[1]);
+    if (box.checked) await deleteToDo(box.parentElement.children[1]);
     if (box.checked && box.parentElement.classList.contains("to-do-input")) {
       box.parentElement.remove();
     }
