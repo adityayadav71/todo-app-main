@@ -86,7 +86,8 @@ Array.from(filterBtn).forEach((btn) => {
 });
 
 clearBtn.addEventListener("click", function () {
-  Array.from(checkboxes).forEach((box) => {
+  Array.from(checkboxes).forEach(async (box) => {
+    await deleteToDo(box.parentElement.children[1]);
     if (box.checked && box.parentElement.classList.contains("to-do-input")) {
       box.parentElement.remove();
     }
@@ -94,45 +95,74 @@ clearBtn.addEventListener("click", function () {
   checkEmptyList();
   updateCount();
 });
+function renderToDos() {
+  [...toDo].forEach((el) => {
+    if (el.parentElement.classList.contains("to-do")) el.remove();
+  });
+  fetch("/getToDo")
+    .then((res) => res.json())
+    .then((data) => {
+      data.forEach((entry) => {
+        const html = `
+            <div class="to-do-input">
+              <input type="checkbox" id="checkbox-${
+                toDo.length + 1
+              }" class="checkbox" />
+              <label for="checkbox-${toDo.length + 1}" class="checkbox-label">${
+          entry.toDo
+        }</label>
+              <button class="delete">
+                <img class="delete" src="/images/icon-cross.svg" alt="delete-this-to-do" />
+              </button>
+            </div>
+          `;
+        toDoList.insertAdjacentHTML("beforeend", html);
+      });
+      updateCount();
+      checkEmptyList();
+    });
+}
+renderToDos();
 
-toDoInput.addEventListener("keypress", function (e) {
+toDoInput.addEventListener("keypress", async function (e) {
   if (e.key === "Enter") {
     if (toDoInput.value === "") return;
-    const html = `
-      <div class="to-do-input">
-        <input type="checkbox" id="checkbox-${
-          toDo.length + 1
-        }" class="checkbox" />
-        <label for="checkbox-${toDo.length + 1}" class="checkbox-label">${
-      toDoInput.value
-    }</label>
-        <button class="delete">
-          <img class="delete" src="/images/icon-cross.svg" alt="delete-this-to-do" />
-        </button>
-      </div>
-    `;
-    fetch("/addToDo", {
+    const input = this.value;
+    const data = { input };
+    await fetch("/addToDo", {
       method: "POST",
 
-      body: JSON.stringify({
-        username: "ay",
-        toDo: "toDoInput.value",
-      }),
+      body: JSON.stringify(data),
       headers: {
         "Content-type": "application/json; charset=UTF-8",
       },
     });
-    toDoList.insertAdjacentHTML("beforeend", html);
+    renderToDos();
     toDoInput.value = "";
-    updateCount();
-    checkEmptyList();
   }
 });
 
-toDoList.addEventListener("click", function (e) {
+toDoList.addEventListener("click", async function (e) {
   if (e.target.classList.contains("delete")) {
-    e.target.closest(".to-do-input")?.remove();
+    const container = e.target.closest(".to-do-input") ?? undefined;
+    if (container !== undefined) {
+      await deleteToDo(container.children[1]);
+      container.remove();
+    }
     checkEmptyList();
     updateCount();
   }
 });
+
+async function deleteToDo(toDoEl) {
+  const toDo = toDoEl.textContent;
+  const data = { toDo };
+  await fetch("/removeToDo", {
+    method: "POST",
+
+    body: JSON.stringify(data),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8",
+    },
+  });
+}
